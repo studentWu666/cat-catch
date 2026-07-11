@@ -3,6 +3,8 @@
 # 📑简介
 猫抓(cat-catch) 资源嗅探扩展，能够帮你筛选列出当前页面的资源。
 
+> ⚠️ **本 Fork 的改动**：已移除对 `www.douyin.com` 的屏蔽限制，现在可以正常嗅探和下载抖音视频资源。
+
 # 📖安装地址
 ## 🐴Chrome
 https://chrome.google.com/webstore/detail/jfedfbgedapdagkghmgibemcoggfppbb

@@ -3,6 +3,8 @@
 # 📑Introduction
 Cat-Catch is a resource sniffing extension that can help you filter and list the resources of the current page.
 
+> ⚠️ **This Fork's Change**: Removed the blocking restriction for `www.douyin.com` (Douyin/TikTok China). You can now sniff and download video resources from Douyin normally.
+
 # 📖Installation
 ## 🐴Chrome
 https://chrome.google.com/webstore/detail/jfedfbgedapdagkghmgibemcoggfppbb
