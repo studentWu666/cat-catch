@@ -7,9 +7,7 @@ var cacheData = { init: true };
 G.blockUrlSet = new Set();    // 屏蔽网址列表
 
 // 避免抓取列表
-G.damnUrl = [
-    /^https:\/\/.*\.douyin\.com\/.*$/i,
-];
+G.damnUrl = [];
 G.damnUrlSet = new Set();
 
 // 初始化当前tabId

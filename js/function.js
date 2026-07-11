@@ -439,12 +439,6 @@ function send2localArray(action, arrayData, tabId = 0) {
 }
 
 function isDamnUrl(url) {
-    for (let key in G.damnUrl) {
-        G.damnUrl[key].lastIndex = 0;
-        if (G.damnUrl[key].test(url)) {
-            return true;
-        }
-    }
     return false;
 }
 
