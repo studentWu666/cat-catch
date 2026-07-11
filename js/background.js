@@ -102,10 +102,6 @@ function findMedia(data, isRegex = false, filter = false, timer = false) {
         return;
     }
 
-    if (G.damn && G.damnUrlSet.has(data.tabId)) {
-        return;
-    }
-
     // 检查 是否启用 是否在当前标签是否在屏蔽列表中
     const blockUrlFlag = data.tabId && data.tabId > 0 && G.blockUrlSet.has(data.tabId);
     if (!G.enable || (G.blockUrlWhite ? !blockUrlFlag : blockUrlFlag)) {
@@ -436,9 +432,6 @@ chrome.runtime.onMessage.addListener(function (Message, sender, sendResponse) {
     }
     // 对tabId的标签 脚本注入或删除
     if (Message.Message == "script") {
-        if (G.damn && G.damnUrlSet.has(Message.tabId)) {
-            return;
-        }
         if (!G.scriptList.has(Message.script)) {
             sendResponse("error no exists");
             return false;
@@ -560,10 +553,6 @@ chrome.runtime.onMessage.addListener(function (Message, sender, sendResponse) {
         sendResponse("ok");
         return true;
     }
-    if (Message.Message == "damnUrlHas") {
-        sendResponse(G.damnUrlSet.has(Message.tabId));
-        return true;
-    }
     if (Message.Message == "closeScript") {
         if (!Message.script || !G.scriptList.has(Message.script)) {
             sendResponse("error");
@@ -635,12 +624,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             if (isLockUrl(changeInfo.url)) {
                 G.blockUrlSet.add(tabId);
             }
-        }
-
-        G.damnUrlSet.delete(tabId);
-        if (isDamnUrl(changeInfo.url)) {
-            G.damnUrlSet.add(tabId);
-        }
     }
     chrome.sidePanel.setOptions({
         tabId,
@@ -663,11 +646,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
         G.blockUrlSet.delete(details.tabId);
         if (isLockUrl(details.url)) {
             G.blockUrlSet.add(details.tabId);
-        }
-
-        G.damnUrlSet.delete(details.tabId);
-        if (isDamnUrl(details.url)) {
-            G.damnUrlSet.add(details.tabId);
         }
     }
 
@@ -725,7 +703,6 @@ chrome.tabs.onRemoved.addListener(function (tabId) {
     });
     if (G.initSyncComplete) {
         G.blockUrlSet.has(tabId) && G.blockUrlSet.delete(tabId);
-        G.damnUrlSet.has(tabId) && G.damnUrlSet.delete(tabId);
     }
 });
 
@@ -1059,7 +1036,6 @@ function clearRedundant() {
         autoDownFlag && (chrome.storage.session ?? chrome.storage.local).set({ featAutoDownTabId: Array.from(G.featAutoDownTabId) });
 
         G.blockUrlSet = new Set([...G.blockUrlSet].filter(x => allTabId.has(x)));
-        G.damnUrlSet = new Set([...G.damnUrlSet].filter(x => allTabId.has(x)));
 
         if (G.requestHeaders.size >= 10240) {
             G.requestHeaders.clear();

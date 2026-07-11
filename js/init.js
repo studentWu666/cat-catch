@@ -6,9 +6,6 @@ G.initLocalComplete = false;
 var cacheData = { init: true };
 G.blockUrlSet = new Set();    // 屏蔽网址列表
 
-// 避免抓取列表
-G.damnUrl = [];
-G.damnUrlSet = new Set();
 
 // 初始化当前tabId
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -302,7 +299,6 @@ function InitOptions() {
             for (const tab of tabs) {
                 if (tab.url) {
                     isLockUrl(tab.url) && G.blockUrlSet.add(tab.id);
-                    isDamnUrl(tab.url) && G.damnUrlSet.add(tab.id);
                 }
             }
         });

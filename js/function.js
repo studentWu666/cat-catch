@@ -438,10 +438,6 @@ function send2localArray(action, arrayData, tabId = 0) {
     return executeCoreRequest(postData, { action, tabId });
 }
 
-function isDamnUrl(url) {
-    return false;
-}
-
 /**
  * 判断url是否在屏蔽网址中
  * @param {String} url 
