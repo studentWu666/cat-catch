@@ -117,10 +117,7 @@
             }
             if (typeof data[key] == "string") {
                 if (isUrl(data[key])) {
-                    let ext = getExtension(data[key]);
-                    if (!ext && data.mimeType) {
-                        ext = getExtByType(data.mimeType);
-                    }
+                    const ext = getExtension(data[key]);
                     if (ext) {
                         const url = data[key].startsWith("//") ? (location.protocol + data[key]) : data[key];
                         extractBaseUrl(url);
@@ -669,17 +666,6 @@
             ext == "key"
         ) { return ext; }
         return false;
-    }
-    function getExtByType(mimeType) {
-        if (!mimeType || typeof mimeType != "string") { return undefined; }
-        const m = mimeType.match(/^(video|audio)\/(mp4|webm|ogg|mp2t|x-m4a|mpeg|quicktime)/i);
-        if (!m) { return undefined; }
-        const format = m[2].toLowerCase();
-        const map = {
-            "mp4": "mp4", "webm": "webm", "ogg": "ogg", "mp2t": "ts",
-            "x-m4a": "m4a", "mpeg": "mpeg", "quicktime": "mov"
-        };
-        return map[format] || undefined;
     }
     function toUrl(text, ext = "m3u8") {
         if (!text) { return; }
