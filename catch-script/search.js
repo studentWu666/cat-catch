@@ -851,44 +851,6 @@
     }
 
 
-    // YouTube: 使用 ANDROID 客户端请求 direct URL（无 signatureCipher）
-    if (!isRunningInWorker && typeof document !== "undefined" && window.top === window.self && location.hostname.includes("youtube.com")) {
-        async function youtubeFetchFormats() {
-            try {
-                // 等待 ytcfg 可用
-                let retries = 0, apiKey = "";
-                while (!(apiKey = window.ytcfg?.data_?.INNERTUBE_API_KEY) && retries < 30) {
-                    await new Promise(r => setTimeout(r, 300));
-                    retries++;
-                }
-                if (!apiKey) return;
-
-                const videoId = new URLSearchParams(location.search).get("v");
-                if (!videoId) return;
-
-                const response = await fetch(
-                    "https://www.youtube.com/youtubei/v1/player?key=" + apiKey,
-                    {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({
-                            videoId: videoId,
-                            context: {
-                                client: { clientName: "ANDROID", clientVersion: "19.44.38", androidSdkVersion: 33, hl: "zh" }
-                            }
-                        })
-                    }
-                );
-                const data = await response.json();
-                // fetch hook 已处理，手动再调一次 findMedia 确保捕获
-                data && findMedia(data);
-            } catch (e) {
-                console.error("YouTube format fetch error:", e);
-            }
-        }
-        youtubeFetchFormats();
-    }
-
     // 等待页面加载完毕 读取网页中的脚本
     if (!isRunningInWorker && typeof document !== "undefined") {
         document.addEventListener("DOMContentLoaded", async function () {
