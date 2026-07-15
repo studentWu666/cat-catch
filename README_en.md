@@ -3,7 +3,9 @@
 # 📑Introduction
 Cat-Catch is a resource sniffing extension that can help you filter and list the resources of the current page.
 
-> ⚠️ **This Fork's Change**: Removed the upstream "Opt-Out List" (damnUrl) blocking mechanism. All websites can now be sniffed and downloaded normally.
+> ⚠️ **This Fork's Change**:
+> - Removed the upstream "Opt-Out List" (damnUrl) blocking mechanism. All websites can now be sniffed and downloaded normally.
+> - **Restored YouTube support**: Uses ANDROID client API to obtain direct video/audio stream URLs. Enable Deep Search to capture them.
 
 # 📖Installation
 ## 🐴Chrome
