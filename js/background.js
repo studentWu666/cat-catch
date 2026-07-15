@@ -624,6 +624,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             if (isLockUrl(changeInfo.url)) {
                 G.blockUrlSet.add(tabId);
             }
+        }
     }
     chrome.sidePanel.setOptions({
         tabId,
