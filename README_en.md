@@ -48,17 +48,8 @@ For full functionality, use version 104 or above.
 This extension is intended for downloading videos that you own or have authorized access to. It is prohibited to use this Tool for downloading copyrighted content without permission. Users are solely responsible for their actions, and the developer is not liable for any user behavior. This Tool is provided "as-is," and the developer assumes no direct or indirect liability.
 
 # 🚫 Copyright Protection and Opt-Out Policy
-We respect the intellectual property rights and legitimate interests of all websites and their operators.
-If you do not permit this tool to operate on your website, please follow the procedure below to submit a request. We will add your domain to the project's "Opt-Out List."
-- Create a new **Issue** in this repository.
-- **Please use the following title format:** `[Opt-Out Request] YourDomain.com`
-
-In the Issue description, please provide the following information for verification:
-- **Website Domain:** (e.g., `example.com`)
-- **Contact Email:** (For identity verification when necessary).
-
-We commit to honoring your request and will add verified domains to the Opt-Out list in subsequent version updates.
-Please note that this is an open-source project, and updates and releases require a certain cycle. Thank you for your understanding and cooperation.
+This fork has removed the upstream "Opt-Out List" (damnUrl) feature and no longer actively blocks any website.
+If you have copyright concerns, please submit an Opt-Out request to the upstream repository: [xifangczy/cat-catch](https://github.com/xifangczy/cat-catch).
 
 
 
