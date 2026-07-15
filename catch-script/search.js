@@ -851,13 +851,11 @@
     }
 
 
-    // YouTube: (1)轮询 ytInitialPlayerResponse (2)通过background ANDROID API获取direct URL
+    // YouTube: 轮询 ytInitialPlayerResponse，解析 streamingData
     if (!isRunningInWorker && typeof document !== "undefined" && window.top === window.self && location.hostname.includes("youtube.com")) {
-        const videoId = new URLSearchParams(location.search).get("v");
-        let fetchSent = false;
         async function youtubePollPlayerResponse() {
             let retries = 0;
-            while (retries < 50) {
+            while (retries < 40) {
                 try {
                     let pr = window.ytInitialPlayerResponse;
                     if (!pr) {
@@ -866,17 +864,10 @@
                     }
                     if (pr?.streamingData) {
                         findMedia(pr.streamingData);
-                        // 发送API key给background发起ANDROID请求
-                        if (!fetchSent && videoId) {
-                            const apiKey = window.ytcfg?.data_?.INNERTUBE_API_KEY;
-                            if (apiKey) {
-                                fetchSent = true;
-                                window.postMessage({ action: "catCatchYoutubeFetch", apiKey: apiKey, videoId: videoId, tabId: -1 }, "*");
-                            }
-                        }
+                        return;
                     }
                 } catch (e) {}
-                await new Promise(r => setTimeout(r, 400));
+                await new Promise(r => setTimeout(r, 500));
                 retries++;
             }
         }

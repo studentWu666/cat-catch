@@ -566,48 +566,6 @@ chrome.runtime.onMessage.addListener(function (Message, sender, sendResponse) {
         sendResponse("ok");
         return true;
     }
-    // YouTube: background 发起 ANDROID 客户端请求（无 CORS 限制）
-    if (Message.Message == "catCatchYoutubeFetch") {
-        const apiKey = Message.apiKey;
-        const videoId = Message.videoId;
-        const tabId = Message.tabId || sender.tab?.id;
-        (async () => {
-            try {
-                const resp = await fetch(
-                    "https://www.youtube.com/youtubei/v1/player?key=" + apiKey,
-                    {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({
-                            videoId: videoId,
-                            context: {
-                                client: { clientName: "ANDROID", clientVersion: "19.44.38", androidSdkVersion: 33, hl: "zh" }
-                            }
-                        })
-                    }
-                );
-                const data = await resp.json();
-                const formats = [
-                    ...(data.streamingData?.formats || []),
-                    ...(data.streamingData?.adaptiveFormats || [])
-                ];
-                for (const fmt of formats) {
-                    if (!fmt.url || !fmt.mimeType) continue;
-                    const ext = fmt.mimeType.match(/\/(mp4|webm|ogg|mp2t|x-m4a)/i);
-                    findMedia({
-                        url: fmt.url,
-                        tabId: tabId,
-                        extraExt: ext ? ext[1].toLowerCase().replace("x-m4a", "m4a").replace("mp2t", "ts") : undefined,
-                        type: "media"
-                    }, true, true);
-                }
-            } catch (e) {
-                console.error("catCatchYoutubeFetch error:", e);
-            }
-        })();
-        sendResponse("ok");
-        return true;
-    }
 });
 
 // 选定标签 更新G.tabId

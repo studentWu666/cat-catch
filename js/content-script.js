@@ -232,7 +232,7 @@
         });
     };
     window.addEventListener("message", (event) => {
-        const action = ["catCatchAddMedia", "catCatchAddKey", "catCatchFFmpeg", "catCatchFFmpegResult", "catCatchCloseScript", "catCatchYoutubeFetch"];
+        const action = ["catCatchAddMedia", "catCatchAddKey", "catCatchFFmpeg", "catCatchFFmpegResult", "catCatchCloseScript"];
         if (!event.data || !event.data.action || event.origin !== window.location.origin || !action.includes(event.data.action)) { return; }
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -297,10 +297,6 @@
         if (event.data.action == "catCatchCloseScript") {
             if (!event.data.script || !event.isTrusted) { return; }
             chrome.runtime.sendMessage({ Message: "closeScript", ...event.data });
-        }
-        if (event.data.action == "catCatchYoutubeFetch") {
-            if (!event.data.apiKey || !event.data.videoId) { return; }
-            chrome.runtime.sendMessage({ Message: "catCatchYoutubeFetch", apiKey: event.data.apiKey, videoId: event.data.videoId, tabId: event.data.tabId });
         }
 
     }, { capture: true });
