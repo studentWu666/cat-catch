@@ -1042,5 +1042,11 @@
   },
   "dataPreprocessing": {
     "message": "資料預處理"
+  },
+  "reverse": {
+    "message": "倒序排列"
+  },
+  "hideDownloadedSegments": {
+    "message": "隱藏下載成功的切片"
   }
 }

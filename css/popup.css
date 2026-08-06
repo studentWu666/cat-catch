@@ -83,6 +83,12 @@ body {
   padding: 0 10px;
   margin-bottom: 1px;
 }
+#Tips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+}
 #TipsFixed {
   position: fixed;
   display: none;
@@ -163,14 +169,17 @@ button,
 #filter {
   flex-wrap: wrap;
 }
-#filter #regular button {
-  margin-left: 0px;
-}
 #filter #regular input {
   width: 98%;
 }
-#filter .regular {
+#filter #regular {
   margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+#filter button {
+  width: 10rem;
+  margin-left: 1rem;
 }
 #filter #ext {
   display: flex;

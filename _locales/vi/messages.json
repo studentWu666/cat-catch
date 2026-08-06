@@ -1042,5 +1042,11 @@
   },
   "dataPreprocessing": {
     "message": "Tiền xử lý dữ liệu"
+  },
+  "reverse": {
+    "message": "Thứ tự ngược"
+  },
+  "hideDownloadedSegments": {
+    "message": "Ẩn các phân đoạn đã tải xuống"
   }
 }

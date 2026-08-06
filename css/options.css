@@ -317,21 +317,6 @@ textarea {
   word-break: break-all;
 }
 
-.progress-bar {
-  height: 15px;
-  background-color: rgb(189, 193, 198);
-  border-radius: 3px;
-  margin: 3px;
-  margin-bottom: 10px;
-}
-
-.progress {
-  width: 0px;
-  height: 100%;
-  background-color: var(--text2-color);
-  border-radius: 3px;
-}
-
 .m3u8Tips {
   display: flex;
   justify-content: center;
@@ -510,6 +495,10 @@ textarea {
   border-color: var(--background-color) transparent transparent;
 }
 
+#openM3U8DLBox.m3u8Popup {
+  white-space: normal;
+}
+
 .break-all {
   word-break: break-all;
 }
@@ -633,12 +622,52 @@ a.json-placeholder:hover {
   margin-left: 0.5rem;
 }
 
+/* 下载器页面进度条 */
+.progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--progress);
+  background-color: var(--text2-color);
+  transition: width 0.3s ease;
+}
+.progress-bar {
+  --progress: 0%;
+  position: relative;
+  height: 20px;
+  margin: 3px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--text2-color);
+  border-radius: 5px;
+}
 .progress-container {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
+.progress-text {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: var(--text2-color);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.progress-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--background-color);
+  clip-path: inset(0 calc(100% - var(--progress)) 0 0);
+  transition: clip-path 0.3s ease;
+}
 .progress-wrapper {
   flex: 1;
 }
@@ -647,19 +676,8 @@ a.json-placeholder:hover {
   margin-bottom: 1rem;
 }
 
-.newDownload .downItem .progress-bar {
-  margin-bottom: 0;
-  height: 20px;
-}
-
 .newDownload .downItem button {
   margin: 0;
-}
-
-.newDownload .downItem .progress {
-  color: var(--background-color-two);
-  text-align: center;
-  transition: width 0.2s;
 }
 
 /** 导航条 **/
@@ -735,19 +753,24 @@ a.json-placeholder:hover {
   background: var(--button-hover-color);
 }
 
+@property --m3u8-progress {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
 .media-item.selected {
-  --progress: 0%;
+  --m3u8-progress: 0%;
+  transition: --m3u8-progress 0.3s ease;
   background: linear-gradient(
     to right,
-    rgba(26, 115, 232, 0.2) var(--progress),
-    var(--background-color-two) var(--progress)
+    rgba(26, 115, 232, 0.2) var(--m3u8-progress),
+    var(--background-color-two) var(--m3u8-progress)
   );
 }
 
 /* 序号生成（最左侧展示） */
 .media-item::before {
-  counter-increment: ts-counter;
-  content: counter(ts-counter);
+  content: attr(data-number);
   display: inline-block;
   min-width: 0.5rem;
   font-weight: bold;
@@ -811,8 +834,8 @@ a.json-placeholder:hover {
   /* 进度条 */
   background: linear-gradient(
     to right,
-    rgba(255, 0, 0, 0.15) var(--progress),
-    var(--background-color-two) var(--progress)
+    rgba(255, 0, 0, 0.15) var(--m3u8-progress),
+    var(--background-color-two) var(--m3u8-progress)
   ) !important;
 }
 
@@ -826,4 +849,8 @@ a.json-placeholder:hover {
 
 .m3u8Regular {
   width: 20rem;
+}
+
+.inline-flex {
+  display: inline-flex;
 }

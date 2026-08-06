@@ -1042,5 +1042,11 @@
   },
   "dataPreprocessing": {
     "message": "데이터 전처리"
+  },
+  "reverse": {
+    "message": "역순"
+  },
+  "hideDownloadedSegments": {
+    "message": "다운로드한 세그먼트 숨기기"
   }
 }

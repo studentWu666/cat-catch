@@ -104,7 +104,7 @@ function findMedia(data, isRegex = false, filter = false, timer = false) {
 
     // 检查 是否启用 是否在当前标签是否在屏蔽列表中
     const blockUrlFlag = data.tabId && data.tabId > 0 && G.blockUrlSet.has(data.tabId);
-    if (!G.enable || (G.blockUrlWhite ? !blockUrlFlag : blockUrlFlag)) {
+    if (!G.enable || (G.blockUrlWhite ? !blockUrlFlag : blockUrlFlag) || data?.method == "OPTIONS") {
         return;
     }
 
@@ -902,25 +902,38 @@ function getResponseHeadersValue(data) {
  * @param {Object} data 
  * @returns {Object|Boolean}
  */
+const DIRECT_INCLUDE_HEADERS = new Set([
+    "referer",
+    "origin",
+    "cookie",
+    "authorization",
+    "auth",
+    "token",
+    "key",
+    "access-token",
+    "api-key",
+    "app-token",
+    "authtoken",
+    "session-id"
+]);
+const X_AUTH_KEYWORD_REG = /(auth|token|sign|key|ticket|session)/;
 function getRequestHeaders(data) {
-    if (data.allRequestHeaders == undefined || data.allRequestHeaders.length == 0) { return false; }
+    if (!data?.allRequestHeaders?.length) {
+        return false;
+    }
     const header = {};
     for (let item of data.allRequestHeaders) {
-        item.name = item.name.toLowerCase();
-        if (item.name == "referer") {
-            header.referer = item.value;
-        } else if (item.name == "origin") {
-            header.origin = item.value;
-        } else if (item.name == "cookie") {
-            header.cookie = item.value;
-        } else if (item.name == "authorization") {
-            header.authorization = item.value;
+        if (!item.name || !item.value) continue;
+        const lowerName = item.name.toLowerCase();
+        if (DIRECT_INCLUDE_HEADERS.has(lowerName)) {
+            header[lowerName] = item.value;
+            continue;
+        }
+        if (lowerName.startsWith("x-") && X_AUTH_KEYWORD_REG.test(lowerName)) {
+            header[lowerName] = item.value;
         }
     }
-    if (Object.keys(header).length) {
-        return header;
-    }
-    return false;
+    return Object.keys(header).length > 0 ? header : false;
 }
 //设置扩展图标
 function SetIcon(obj) {

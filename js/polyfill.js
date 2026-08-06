@@ -39,3 +39,31 @@ const i18n = new Proxy(chrome.i18n.getMessage, {
         return chrome.i18n.getMessage(key);
     }
 });
+
+// 手机浏览器不支持右键菜单
+if (!chrome.contextMenus) {
+    chrome.contextMenus = {
+        create: function () { },
+        remove: function () { },
+        removeAll: function () { },
+        onClicked: { addListener: function () { } },
+    }
+}
+
+// 手机浏览器没有windows API 只能使用tabs API
+if (!chrome.windows) {
+    chrome.windows = {
+        onFocusChanged: { addListener: function () { } },
+        create: function (obj, callback) {
+            chrome.tabs.create({ url: obj.url }, function (tab) {
+                callback && callback(tab);
+            });
+        },
+    }
+}
+// 手机浏览器木有快捷键
+if (!chrome.commands) {
+    chrome.commands = {
+        onCommand: { addListener: function () { } }
+    }
+}

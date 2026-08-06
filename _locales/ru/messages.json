@@ -1042,5 +1042,11 @@
   },
   "dataPreprocessing": {
     "message": "Предобработка данных"
+  },
+  "reverse": {
+    "message": "Обратный порядок"
+  },
+  "hideDownloadedSegments": {
+    "message": "Скрыть загруженные сегменты"
   }
 }

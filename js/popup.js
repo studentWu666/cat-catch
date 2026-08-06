@@ -454,6 +454,8 @@ function AddMedia(data, currentTab = true) {
                     value.html.hide();
                 }
             });
+
+            $filter_ext.find("input:checked").length ? $tips.hide() : $tips.html(i18n.noData).show();
         });
         $filter_ext.append(html);
     }
@@ -525,7 +527,7 @@ $('#allTab').click(function () {
             if (key == G.tabId) { continue; }
             allCount += data[key].length;
             for (let i = 0; i < data[key].length; i++) {
-                $all.append(AddMedia(data[key][i], false));
+                $all[G.reverse ? 'prepend' : 'append'](AddMedia(data[key][i], false));
             }
         }
         allCount && $allMediaList.append($all);
@@ -632,22 +634,23 @@ $('#unfoldAll, #unfoldPlay, #unfoldFilter, #fold').click(function () {
 // 捕捉/录制 展开按钮 筛选按钮 按钮
 // $('#Catch, #openUnfold, #openFilter, #more').click(function () {
 $('#openFilter, #more').click(function () {
-    // const _height = parseInt($(".container").css("margin-bottom"));
-    // $(".container").css("margin-bottom", ($down[0].offsetHeight + 26) + "px");
     const $panel = $(`#${this.getAttribute("panel")}`);
     $panel.css("bottom", $down[0].offsetHeight + "px");
     $(".more").not($panel).hide();
     if ($panel.is(":hidden")) {
         $panel.css("display", "flex");
+        // const _height = $panel[0].offsetHeight + $down[0].offsetHeight;
+        // $(".container").css("margin-bottom", _height);
         return;
     }
-    // $(".container").css("margin-bottom", _height);
+    // $(".container").css("margin-bottom", $down[0].offsetHeight + "px");
     $panel.hide();
 });
 
 // 正则筛选
-$("#regular input").bind('keypress', function (event) {
+$("#regularText").bind('keypress', function (event) {
     if (event.keyCode == "13") {
+        $tips.hide();
         const input = $(this).val();
         if (input == "") {
             getData().forEach(function (data) {
@@ -657,18 +660,24 @@ $("#regular input").bind('keypress', function (event) {
             return;
         }
         const regex = new RegExp($(this).val());
+        let remainingCount = 0;
         getData().forEach(function (data) {
+            data.checked = true;
+            data.html.show();
             if (!regex.test(data.url)) {
                 data.checked = false;
                 data.html.hide();
+                return;
             }
+            remainingCount++;
         });
+        remainingCount === 0 && $tips.html(i18n.noData).show();
         $("#filter").hide();
     }
 });
 
 // 删除重复文件名
-$("#duplicateFilenames").click(function () {
+$("#filter-duplicateFilenames, #features-duplicateFilenames").click(function () {
     duplicateFilenamesSet = new Set();
     getData().forEach(function (value) {
         if (duplicateFilenamesSet.has(value.name)) {
@@ -846,7 +855,6 @@ const interval = setInterval(async function () {
 
     // 获取页面DOM
     if (G.getHtmlDOM) {
-        // pageDOM = getPageDOM();
         getPageDOM().then(dom => {
             pageDOM = dom;
         }).catch(error => {
@@ -867,7 +875,7 @@ const interval = setInterval(async function () {
             return;
         }
         for (let key = 0; key < currentCount; key++) {
-            $current.append(AddMedia(data[key]));
+            $current[G.reverse ? 'prepend' : 'append'](AddMedia(data[key]))
         }
         $mediaList.append($current);
         UItoggle();
@@ -881,11 +889,11 @@ const interval = setInterval(async function () {
             if (Message.data.tabId == G.tabId) {
                 !currentCount && $mediaList.append($current);
                 currentCount++;
-                $current.append(html);
+                $current[G.reverse ? 'prepend' : 'append'](html);
                 UItoggle();
             } else if (allCount) {
                 allCount++;
-                $all.append(html);
+                $all[G.reverse ? 'prepend' : 'append'](html);
                 UItoggle();
             }
             sendResponse("OK");

@@ -1041,6 +1041,12 @@
     "message": "Menú contextual"
   },
   "dataPreprocessing": {
-    "message": "Preprocesamiento de datos"
+    "message": "Preprocesar datos"
+  },
+  "reverse": {
+    "message": "Invertir orden"
+  },
+  "hideDownloadedSegments": {
+    "message": "Ocultar segmentos descargados"
   }
 }
