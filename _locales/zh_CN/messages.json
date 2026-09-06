@@ -1048,5 +1048,11 @@
   },
   "hideDownloadedSegments": {
     "message": "隐藏下载成功的切片"
+  },
+  "showGroup": {
+    "message": "显示分组"
+  },
+  "groupTime": {
+    "message": "分组时间"
   }
 }

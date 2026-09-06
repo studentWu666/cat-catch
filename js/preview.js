@@ -393,6 +393,22 @@ class FilePreview {
             this.fileItems.sort((a, b) => order * (a[field] - b[field]));
         }
 
+        // 先把this.fileItems数组对象的 group属性清空
+        this.fileItems.forEach(item => {
+            item.group = null;
+        });
+        // 将时间戳相近的文件分组
+        let group = 1;
+        for (let i = 0; i < this.fileItems.length - 1; i += 2) {
+            const current = this.fileItems[i];
+            const next = this.fileItems[i + 1];
+            if (Math.abs(current.getTime - next.getTime) <= G.groupTime) {
+                current.group = group;
+                next.group = group;
+                group++;
+            }
+        }
+
         // 更新显示
         this.renderFileItems();
         this.updateButtonStatus();
@@ -409,7 +425,7 @@ class FilePreview {
         item.html.className = 'file-item';
         item.html.innerHTML = `
             <div class="file-title ${this.showTitle ? "" : "hide"}">${item.title}</div>
-            <div class="file-name">${item.name}</div>
+            <div class="file-name">${item.group && G.showGroup ? `[${item.group}] ` : ""}${item.name}</div>
             <div class="preview-container">
                 <img src="${item.favIconUrl || 'img/icon.png'}" class="preview-image icon">
             </div>

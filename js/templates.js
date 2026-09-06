@@ -35,7 +35,29 @@ class Template {
             return "";
         },
         filter: (txt, arg) => stringModify(txt, arg[0]),
-        prompt: (txt) => window.prompt("", txt) || ""
+        prompt: (txt) => window.prompt("", txt) || "",
+        before: (txt, arg) => {
+            if (arg[0] === "" || arg[0] === undefined) return txt;
+            // 如果有 arg[1] 参数 则获取最后一个 arg[0] 之前的内容，否则获取第一个 arg[0] 之前的内容
+            if (arg[1] === "true" || arg[1] === "1" || arg[1] === "last") {
+                const lastIndex = txt.lastIndexOf(arg[0]);
+                return lastIndex !== -1 ? txt.substring(0, lastIndex) : txt;
+            } else {
+                const firstIndex = txt.indexOf(arg[0]);
+                return firstIndex !== -1 ? txt.substring(0, firstIndex) : txt;
+            }
+        },
+        after: (txt, arg) => {
+            if (arg[0] === "" || arg[0] === undefined) return txt;
+            // 如果有 arg[1] 参数 则获取最后一个 arg[0] 之后的内容，否则获取第一个 arg[0] 之后的内容
+            if (arg[1] === "true" || arg[1] === "1" || arg[1] === "last") {
+                const lastIndex = txt.lastIndexOf(arg[0]);
+                return lastIndex !== -1 ? txt.substring(lastIndex + arg[0].length) : "";
+            } else {
+                const firstIndex = txt.indexOf(arg[0]);
+                return firstIndex !== -1 ? txt.substring(firstIndex + arg[0].length) : "";
+            }
+        },
     };
 
     // ---------- 核心入口（即原来的 templates 函数）----------

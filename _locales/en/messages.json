@@ -1048,5 +1048,11 @@
   },
   "hideDownloadedSegments": {
     "message": "Hide downloaded segments"
+  },
+  "showGroup": {
+    "message": "Show Group"
+  },
+  "groupTime": {
+    "message": "Group Time"
   }
 }

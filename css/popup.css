@@ -68,6 +68,9 @@ body {
   font-weight: bold;
   color: #666;
 }
+.popupBody .panel .group {
+  font-weight: bold;
+}
 #Tips,
 #TipsFixed {
   left: 0;

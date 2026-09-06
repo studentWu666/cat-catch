@@ -568,6 +568,24 @@ chrome.runtime.onMessage.addListener(function (Message, sender, sendResponse) {
     }
 });
 
+/**
+ * 监听 外部扩展 message 事件
+ */
+chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+    if (request.action === "getData") {
+        if (request.tabId) {
+            sendResponse(cacheData[request.tabId] ?? null);
+            return true;
+        }
+        sendResponse(cacheData);
+        return true;
+    } else if (request.action === "getCurrentTabData") {
+        const tabId = request.tabId ?? G.tabId;
+        sendResponse(cacheData[tabId] ?? null);
+        return true;
+    }
+});
+
 // 选定标签 更新G.tabId
 // chrome.tabs.onHighlighted.addListener(function (activeInfo) {
 //     if (activeInfo.windowId == -1 || !activeInfo.tabIds || !activeInfo.tabIds.length) { return; }

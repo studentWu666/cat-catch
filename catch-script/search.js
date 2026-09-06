@@ -230,8 +230,8 @@
     }
 
     // fetch
-    const _fetch = fetch;
-    fetch = async function (input, init) {
+    const _fetch = self.fetch;
+    self.fetch = async function (input, init) {
         let response;
         try {
             response = await _fetch.apply(this, arguments);
@@ -273,7 +273,7 @@
             });
         return clone;
     }
-    fetch.toString = function () {
+    self.fetch.toString = function () {
         return _fetch.toString();
     }
 
@@ -336,8 +336,8 @@
     //#endregion
 
     // window.btoa / window.atob
-    const _btoa = btoa;
-    btoa = function (data) {
+    const _btoa = self.btoa;
+    self.btoa = function (data) {
         const base64 = _btoa.apply(this, arguments);
         CATCH_SEARCH_DEBUG && console.log(base64, data, base64.length);
         if (base64.length == 24 && base64.substring(22, 24) == "==") {
@@ -348,11 +348,11 @@
         }
         return base64;
     }
-    btoa.toString = function () {
+    self.btoa.toString = function () {
         return _btoa.toString();
     }
-    const _atob = atob;
-    atob = function (base64) {
+    const _atob = self.atob;
+    self.atob = function (base64) {
         const data = _atob.apply(this, arguments);
         CATCH_SEARCH_DEBUG && console.log(base64, data, base64.length);
         if (base64.length == 24 && base64.substring(22, 24) == "==") {
@@ -366,7 +366,7 @@
         }
         return data;
     }
-    atob.toString = function () {
+    self.atob.toString = function () {
         return _atob.toString();
     }
 

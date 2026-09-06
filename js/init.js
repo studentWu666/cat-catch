@@ -168,6 +168,9 @@ G.OptionLists = {
     iframeFFmpeg: false,    // 潜入在线ffmpeg
     contextMenus: false,    // 右键菜单
     reverse: false, // 倒叙排序
+
+    showGroup: true, // 显示分组
+    groupTime: 120, // 分组时间间隔，单位毫秒
 };
 
 // 本地储存的配置
