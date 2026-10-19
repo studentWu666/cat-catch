@@ -393,19 +393,64 @@ class FilePreview {
             this.fileItems.sort((a, b) => order * (a[field] - b[field]));
         }
 
-        // 先把this.fileItems数组对象的 group属性清空
-        this.fileItems.forEach(item => {
-            item.group = null;
-        });
-        // 将时间戳相近的文件分组
-        let group = 1;
-        for (let i = 0; i < this.fileItems.length - 1; i += 2) {
-            const current = this.fileItems[i];
-            const next = this.fileItems[i + 1];
-            if (Math.abs(current.getTime - next.getTime) <= G.groupTime) {
-                current.group = group;
-                next.group = group;
-                group++;
+        // // 先把this.fileItems数组对象的 group属性清空
+        // this.fileItems.forEach(item => {
+        //     item.group = null;
+        // });
+        // // 将时间戳相近的文件分组
+        // let group = 1;
+        // for (let i = 0; i < this.fileItems.length - 1; i += 2) {
+        //     const current = this.fileItems[i];
+        //     const next = this.fileItems[i + 1];
+        //     if (Math.abs(current.getTime - next.getTime) <= G.groupTime) {
+        //         current.group = group;
+        //         next.group = group;
+        //         group++;
+        //     }
+        // }
+
+        // 将时间戳相近的文件进行最优分组
+        if (G.showGroup) {
+            // 先把this.fileItems数组对象的 group属性清空
+            this.fileItems.forEach(item => {
+                item.group = null;
+            });
+            // 提取判断逻辑，保持代码整洁（如果后续需要加上 ext/type 的判断，也可以加在这里）
+            const canGroup = (a, b) => {
+                if (!a || !b) return false;
+                return Math.abs(a.getTime - b.getTime) <= G.groupTime
+                    && !(a.type?.startsWith('audio') && b.type?.startsWith('audio'))
+                    && (a.ext === 'm3u8') === (b.ext === 'm3u8');
+            };
+            let group = 1;
+            let i = 0;
+            while (i < this.fileItems.length) {
+                const current = this.fileItems[i];
+                const next1 = this.fileItems[i + 1];
+                const next2 = this.fileItems[i + 2];
+
+                const match1 = canGroup(current, next1);
+                const match2 = canGroup(next1, next2);
+
+                if (match1) {
+                    const diff1 = Math.abs(current.getTime - next1.getTime);
+                    const diff2 = match2 ? Math.abs(next1.getTime - next2.getTime) : Infinity;
+
+                    // 如果下一个和下下个也能成组，并且它们的时间靠得更近
+                    // 则放弃当前的结合，让 current 保持独立，游标只前进 1 步
+                    if (match2 && diff2 < diff1) {
+                        i++;
+                    } else {
+                        // current 和 next1 结合是当前的最优解
+                        current.group = group;
+                        next1.group = group;
+                        group++;
+                        i += 2; // 两项已成功分组，游标前进 2 步
+                    }
+                } else {
+                    // current 和 next1 无法成组，游标前进 1 步继续往下看
+                    i++;
+                }
             }
         }
 

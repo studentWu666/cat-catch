@@ -101,6 +101,7 @@ class Template {
             ext: data.ext ?? "",
             mobileUserAgent: G.MobileUserAgent,
             userAgent: G.userAgent || navigator.userAgent,
+            br: "\n",
         };
         trimData.title = trimData.title.replace(/[/\\]/g, "_");
         const _data = { ...data, ...trimData };
@@ -243,7 +244,7 @@ class Template {
     static _evalTag(tag, data, trimData) {
         let value;
         if (tag.varName === 'data') {
-            const { pageDOM, year, month, date, day, fullDate, time, hours, minutes, seconds, mobileUserAgent, ...rest } = trimData;
+            const { pageDOM, year, month, date, day, fullDate, time, hours, minutes, seconds, mobileUserAgent, br, ...rest } = trimData;
             value = JSON.stringify(rest);
         } else {
             value = data[tag.varName];
